@@ -27,7 +27,9 @@ Route::group(["middleware"=> "auth:sanctum"], function(){
 });
 
 Route::apiResource('homedata', HomeContentController::class);
-route::put('homedata', [HomeContentController::class, 'update']);
+Route::apiResource('headerlogo', HeaderApiController::class);
+
+// route::put('homedata', [HomeContentController::class, 'update']);
 
 Route::apiResource('products', ProductsController::class);
 Route::apiResource('categories', CategoryController::class);

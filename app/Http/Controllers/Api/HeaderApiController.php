@@ -5,22 +5,32 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\HomeContent; // Assuming you have a model to store image paths
+use App\Models\Header_footer; // Assuming you have a model to store image paths
 
 class HeaderApiController extends Controller
 {
+
+    public function __construct()
+    {
+        // Fetch the base URL from the environment file
+        $this->baseUrl = env('API_URL', 'http://localhost:8000');
+    }
+
     public function index()
     {
-        // Fetch the image path from the database
-        $homeContent = HomeContent::first(); // Assuming you have only one record for simplicity
 
-        if ($homeContent && $homeContent->image_path) {
-            $imagePath = $homeContent->image_path;
+     
+        // Fetch the image path from the database
+        $homeContent = Header_footer::first(); // Assuming you have only one record for simplicity
+        // dd($homeContent->header_logo);
+        if ($homeContent && $homeContent->header_logo) {
+            $imagePath = $homeContent->header_logo;
+
 
             if (Storage::disk('public')->exists($imagePath)) {
                 return response()->json([
                     'message' => 'Image retrieved successfully',
-                    'image_path' => Storage::disk('public')->url($imagePath) // Return the URL to the image
+                    'image_path' => $this->baseUrl .'/storage/'.$imagePath // Return the URL to the image
                 ], 200);
             }
         }
@@ -40,12 +50,12 @@ class HeaderApiController extends Controller
         // Handle image upload
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imagePath = $image->store('home', 'public');
+            $imagePath = $image->store('headerLogo', 'public');
 
             // Save the image path to the database
-            $homeContent = HomeContent::updateOrCreate(
+            $homeContent = Header_footer::updateOrCreate(
                 [], // Update the first record or create if none exists
-                ['image_path' => $imagePath]
+                ['header_logo' => $imagePath]
             );
 
             return response()->json([
@@ -66,7 +76,7 @@ class HeaderApiController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
         ]);
 
-        $homeContent = HomeContent::first(); // Fetch the current record
+        $homeContent = Header_footer::first(); // Fetch the current record
 
         if ($homeContent && $homeContent->image_path) {
             $currentImagePath = $homeContent->image_path;
@@ -99,7 +109,7 @@ class HeaderApiController extends Controller
 
     public function destroy()
     {
-        $homeContent = HomeContent::first(); // Fetch the current record
+        $homeContent = Header_footer::first(); // Fetch the current record
 
         if ($homeContent && $homeContent->image_path) {
             $currentImagePath = $homeContent->image_path;
