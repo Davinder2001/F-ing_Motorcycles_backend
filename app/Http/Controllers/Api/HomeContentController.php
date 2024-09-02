@@ -1,11 +1,10 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\HomeContent; // Assuming you have a model to store image paths
+use App\Models\HomeContent;
 
 class HomeContentController extends Controller
 {
@@ -19,31 +18,26 @@ class HomeContentController extends Controller
 
     public function index()
     {
-
-        
-
-
-        // Fetch the image path from the database
+        // Fetch the home content from the database
         $homeContent = HomeContent::first(); // Assuming you have only one record for simplicity
 
-        if ($homeContent && $homeContent->image) {
-            $imagePath = $homeContent->image;
+        if ($homeContent) {
+            $response = [
+                'message' => 'Content retrieved successfully',
+                'heading' => $homeContent->heading,
+                'description' => $homeContent->description,
+                'image' => null
+            ];
 
-            if (Storage::disk('public')->exists($imagePath)) {
-                $url = Storage::disk('public')->url($imagePath);
-
-                // Concatenate the base URL from the .env file with the relative image path
-                $url = $this->baseUrl . '/storage/' . $imagePath;
-
-                return response()->json([
-                    'message' => 'Image retrieved successfully',
-                    'image' => $url // Return the complete URL to the image
-                ], 200);
+            if ($homeContent->image && Storage::disk('public')->exists($homeContent->image)) {
+                $response['image'] = $this->baseUrl . '/storage/' . $homeContent->image;
             }
+
+            return response()->json($response, 200);
         }
 
         return response()->json([
-            'message' => 'No image found.'
+            'message' => 'No content found.'
         ], 404);
     }
 
@@ -51,35 +45,43 @@ class HomeContentController extends Controller
     {
         // Validate request
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'heading' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
         ]);
+
+        $imagePath = null;
 
         // Handle image upload
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imagePath = $image->store('home', 'public');
-
-            // Save the image path to the database
-            $homeContent = HomeContent::updateOrCreate(
-                [], // Update the first record or create if none exists
-                ['image' => $imagePath]
-            );
-
-            return response()->json([
-                'message' => 'Image uploaded successfully',
-                'image' => $this->baseUrl . '/storage/' . $imagePath // Return the URL to the image
-            ], 200);
         }
 
+        // Save the content to the database
+        $homeContent = HomeContent::updateOrCreate(
+            [], // Update the first record or create if none exists
+            [
+                'heading' => $request->heading,
+                'description' => $request->description,
+                'image' => $imagePath,
+            ]
+        );
+
         return response()->json([
-            'message' => 'No image file provided.'
-        ], 400);
+            'message' => 'Content uploaded successfully',
+            'heading' => $homeContent->heading,
+            'description' => $homeContent->description,
+            'image' => $imagePath ? $this->baseUrl . '/storage/' . $imagePath : null,
+        ], 200);
     }
 
     public function update(Request $request)
     {
         // Validate request
         $request->validate([
+            'heading' => 'required|string|max:255',
+            'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
         ]);
 
@@ -102,31 +104,31 @@ class HomeContentController extends Controller
 
             $image = $request->file('image');
             $imagePath = $image->store('home', 'public');
-
-            // Update the image path in the database
             $homeContent->image = $imagePath;
-            $homeContent->save();
-
-            return response()->json([
-                'message' => 'Image updated successfully',
-                'image' => $this->baseUrl . '/storage/' . $imagePath // Return the updated URL to the image
-            ], 200);
         }
 
+        // Update the heading and description
+        $homeContent->heading = $request->heading;
+        $homeContent->description = $request->description;
+        $homeContent->save();
+
         return response()->json([
-            'message' => 'No image file provided for update.'
-        ], 400);
+            'message' => 'Content updated successfully',
+            'heading' => $homeContent->heading,
+            'description' => $homeContent->description,
+            'image' => $homeContent->image ? $this->baseUrl . '/storage/' . $homeContent->image : null,
+        ], 200);
     }
 
     public function destroy()
     {
         $homeContent = HomeContent::first(); // Fetch the current record
 
-        if ($homeContent && $homeContent->image) {
+        if ($homeContent) {
             $currentImagePath = $homeContent->image;
 
             // Delete the image if exists
-            if (Storage::disk('public')->exists($currentImagePath)) {
+            if ($currentImagePath && Storage::disk('public')->exists($currentImagePath)) {
                 Storage::disk('public')->delete($currentImagePath);
             }
 
@@ -134,12 +136,12 @@ class HomeContentController extends Controller
             $homeContent->delete();
 
             return response()->json([
-                'message' => 'Image deleted successfully'
+                'message' => 'Content deleted successfully'
             ], 200);
         }
 
         return response()->json([
-            'message' => 'No image file found to delete.'
+            'message' => 'No content found to delete.'
         ], 400);
     }
 }

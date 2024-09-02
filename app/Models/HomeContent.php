@@ -9,8 +9,9 @@ class HomeContent extends Model
 {
     use HasFactory;
 
+    // Define the table name explicitly
     protected $table = 'home_content';
 
-    protected $fillable = ['image'];
-
+    // Define the fillable fields for mass assignment
+    protected $fillable = ['heading', 'description', 'image'];
 }

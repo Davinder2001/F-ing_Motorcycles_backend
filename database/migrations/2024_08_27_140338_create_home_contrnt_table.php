@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('home_content', function (Blueprint $table) {
             $table->id();
-            $table->string('image')->nullable();
+            $table->string('heading')->nullable();  // New field for the heading
+            $table->text('description')->nullable(); // New field for the description
+            $table->string('image')->nullable();    // Existing field for the image
             $table->timestamps();
         });
     }

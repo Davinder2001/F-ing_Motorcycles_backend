@@ -18,7 +18,7 @@ use App\Http\Controllers\Api\HomeContentController;
 Route::post("login", [LoginController::class, 'login']);
 Route::post("register", [LoginController::class, 'registerAdmin']);
 
-Route::apiResource('header', HeaderApiController::class);
+// Route::apiResource('header', HeaderApiController::class);
 Route::apiResource('footer', FooterApiController::class);
 // Group routes protected
 Route::group(["middleware"=> "auth:sanctum"], function(){

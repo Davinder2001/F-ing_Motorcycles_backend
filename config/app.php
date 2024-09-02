@@ -2,6 +2,30 @@
 
 return [
 
+
+
+      /*
+    |--------------------------------------------------------------------------
+    | API Base URL
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used for API requests within your application. You can set
+    | this to the base URL of your API services in the .env file.
+    |
+    */
+    'api_url' => env('API_URL', 'http://localhost:8000'),
+
+       /*
+    |--------------------------------------------------------------------------
+    | Image Base URL
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used as the base URL for images in your application. You can
+    | set this to the base URL of your image storage in the .env file.
+    |
+    */
+    'img_url' => env('IMG_URL', 'http://localhost:8000/storage'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
