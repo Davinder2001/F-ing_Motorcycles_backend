@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,8 +16,8 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('short_description');
-            $table->string('long_description');
+            $table->text('short_description'); // Changed this to 'text' if it's intended for longer content
+            $table->text('long_description');  // Same as above
             $table->string('category_image')->nullable();
             $table->timestamps();
         });

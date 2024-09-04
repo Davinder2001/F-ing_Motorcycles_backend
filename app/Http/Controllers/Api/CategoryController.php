@@ -14,7 +14,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return CategoryResource::collection($categories);
+        return $categories;
     }
 
     public function store(Request $request)
@@ -56,12 +56,16 @@ class CategoryController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Category creation failed: ' . $e->getMessage());
-            return response()->json(['message' => 'Category creation failed.'], 500);
+            return response()->json([
+                'message'   => 'Category creation failed.',
+                'error'     =>  $e->getMessage()
+        ], 500);
         }
     }
 
     public function update(Request $request, Category $category)
     {
+        // dd
         $validatedData = Validator::make($request->all(),
         [
            'name'               =>  'required|string|max:255',
@@ -97,7 +101,8 @@ class CategoryController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Category update failed: ' . $e->getMessage());
-            return response()->json(['message' => 'Category update failed.'], 500);
+            return response()->json(['message' => 'Category update failed.',
+                                       'error' => $e->getMessage() ], 500);
         }
     }
 

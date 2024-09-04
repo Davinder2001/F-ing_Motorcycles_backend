@@ -9,9 +9,20 @@ class HomeContent extends Model
 {
     use HasFactory;
 
-    // Define the table name explicitly
+    // Define the table associated with the model (if not using Laravel's naming convention)
     protected $table = 'home_content';
 
-    // Define the fillable fields for mass assignment
-    protected $fillable = ['heading', 'description', 'image'];
+    // Define the fillable attributes
+    protected $fillable = [
+        'heading',
+        'heading_nxt',
+        'description',
+        'image',
+        'image_2',
+        'Sub_heading_2',
+        'heading_2',
+        'description_2',
+        'button_1', // Added field
+        'button_2',
+    ];
 }

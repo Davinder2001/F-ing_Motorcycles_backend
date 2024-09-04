@@ -13,9 +13,16 @@ return new class extends Migration
     {
         Schema::create('home_content', function (Blueprint $table) {
             $table->id();
-            $table->string('heading')->nullable();  // New field for the heading
-            $table->text('description')->nullable(); // New field for the description
-            $table->string('image')->nullable();    // Existing field for the image
+            $table->string('heading')->nullable();
+            $table->string('heading_nxt')->nullable();
+            $table->text('description')->nullable();
+            $table->string('image')->nullable();
+            $table->string('image_2')->nullable();           // Added field for the second image
+            $table->string('Sub_heading_2')->nullable();     // Added field for the sub-heading
+            $table->string('heading_2')->nullable();         // Added field for the second heading
+            $table->text('description_2')->nullable();       // Added field for the second description
+            $table->string('button_1')->nullable();          // Added field for the first button
+            $table->string('button_2')->nullable();          // Added field for the second button
             $table->timestamps();
         });
     }
