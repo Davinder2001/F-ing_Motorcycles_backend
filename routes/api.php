@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\HeaderApiController;
 use App\Http\Controllers\Api\FooterApiController;
 use App\Http\Controllers\Api\HomeContentController;
 use App\Http\Controllers\Api\InvestorCorner;
+use App\Http\Controllers\Api\ProfileController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -21,6 +22,7 @@ Route::post("register", [LoginController::class, 'registerAdmin']);
 
 // Route::apiResource('header', HeaderApiController::class);
 Route::apiResource('footer', FooterApiController::class);
+Route::apiResource("profile", ProfileController::class);
 // Group routes protected
 Route::group(["middleware"=> "auth:sanctum"], function(){
     Route::get("dashboard", [LoginController::class, 'showDashboard']);
