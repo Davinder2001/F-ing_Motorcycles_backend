@@ -25,17 +25,17 @@ class HomeContentController extends Controller
         $homeContent = HomeContent::first(); // Assuming you have only one record for simplicity
         if ($homeContent) {
             $response = [
-                'message' => 'Content retrieved successfully',
-                'heading' => $homeContent->heading,
-                'heading_nxt' => $homeContent->heading_nxt,
-                'description' => $homeContent->description,
-                'image' => $homeContent->image ? $this->baseUrl . '/storage/' . $homeContent->image : null,
-                'button_1' => $homeContent->button_1, // Added field
-                'image_2' => $homeContent->image_2 ? $this->baseUrl . '/storage/' . $homeContent->image_2 : null,
+                'message'       => 'Content retrieved successfully',
+                'heading'       => $homeContent->heading,
+                'heading_nxt'   => $homeContent->heading_nxt,
+                'description'   => $homeContent->description,
+                'image'         => $homeContent->image ? $this->baseUrl . '/storage/' . $homeContent->image : null,
+                'button_1'      => $homeContent->button_1, // Added field
+                'image_2'       => $homeContent->image_2 ? $this->baseUrl . '/storage/' . $homeContent->image_2 : null,
                 'Sub_heading_2' => $homeContent->Sub_heading_2,
-                'heading_2' => $homeContent->heading_2,
+                'heading_2'     => $homeContent->heading_2,
                 'description_2' => $homeContent->description_2,
-                'button_2' => $homeContent->button_2,
+                'button_2'      => $homeContent->button_2,
             ];
 
             return response()->json($response, 200);

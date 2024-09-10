@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\FooterApiController;
 use App\Http\Controllers\Api\HomeContentController;
 use App\Http\Controllers\Api\InvestorCorner;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\ContactPageApi;
 
 
 // Route::get('/user', function (Request $request) {
@@ -32,6 +33,8 @@ Route::group(["middleware"=> "auth:sanctum"], function(){
 Route::apiResource('homedata', HomeContentController::class);
 Route::apiResource('headerlogo', HeaderApiController::class);
 Route::apiResource('investorPage', InvestorCorner::class);
+Route::apiResource('ContactPage', ContactPageApi::class);
+
 
 // route::put('homedata', [HomeContentController::class, 'update']);
 

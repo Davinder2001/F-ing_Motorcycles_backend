@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Investor;
+use App\Http\Resources\InvestorPageResource;
 
 class InvestorCorner extends Controller
 {
@@ -25,9 +26,10 @@ class InvestorCorner extends Controller
         $investors = Investor::all();
         return response()->json([
             'message' => 'Investors retrieved successfully',
-            'data' => $investors,
+            'data' => InvestorPageResource::collection($investors),
         ], 200);
     }
+    
 
     // Method to store a new investor
     public function store(Request $request)
