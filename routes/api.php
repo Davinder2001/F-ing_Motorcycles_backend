@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\HomeContentController;
 use App\Http\Controllers\Api\InvestorCorner;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ContactPageApi;
+use App\Http\Controllers\Api\HeroSectionController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -34,6 +35,7 @@ Route::apiResource('homedata', HomeContentController::class);
 Route::apiResource('headerlogo', HeaderApiController::class);
 Route::apiResource('investorPage', InvestorCorner::class);
 Route::apiResource('ContactPage', ContactPageApi::class);
+Route::apiResource('heroSection', HeroSectionController::class);
 
 
 // route::put('homedata', [HomeContentController::class, 'update']);

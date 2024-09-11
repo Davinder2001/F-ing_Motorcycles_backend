@@ -12,7 +12,6 @@ class FooterApiController extends Controller
 {
     public function index()
     {
-        // dd('sssssssss');
         $footer = Header_footer::all();
         return response()->json($footer);
     }

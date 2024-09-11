@@ -25,17 +25,30 @@ class HomeContentController extends Controller
         $homeContent = HomeContent::first(); // Assuming you have only one record for simplicity
         if ($homeContent) {
             $response = [
-                'message'       => 'Content retrieved successfully',
-                'heading'       => $homeContent->heading,
-                'heading_nxt'   => $homeContent->heading_nxt,
-                'description'   => $homeContent->description,
-                'image'         => $homeContent->image ? $this->baseUrl . '/storage/' . $homeContent->image : null,
-                'button_1'      => $homeContent->button_1, // Added field
-                'image_2'       => $homeContent->image_2 ? $this->baseUrl . '/storage/' . $homeContent->image_2 : null,
-                'Sub_heading_2' => $homeContent->Sub_heading_2,
-                'heading_2'     => $homeContent->heading_2,
-                'description_2' => $homeContent->description_2,
-                'button_2'      => $homeContent->button_2,
+                'message'            => 'Content retrieved successfully',
+                'id'                 =>$homeContent->id,
+                'heading'            => $homeContent->heading,
+                'heading_nxt'        => $homeContent->heading_nxt,
+                'description'        => $homeContent->description,
+                'heading_2'          => $homeContent->heading_2,
+                'Sub_heading_2'      => $homeContent->Sub_heading_2,
+                's_description_1'    => $homeContent->s_description_1,
+                's_description_2'    => $homeContent->s_description_2,
+                's_description_3'    => $homeContent->s_description_3,
+                'description_2'      => $homeContent->description_2,
+                'image'              => $homeContent->image ? $this->baseUrl . '/storage/' . $homeContent->image : null,
+                'image_2'            => $homeContent->image_2 ? $this->baseUrl . '/storage/' . $homeContent->image_2 : null,
+                'third_sec_heading'  => $homeContent->third_sec_heading,
+                'image_1_sec_3'      => $homeContent->image_1_sec_3 ? $this->baseUrl . '/storage/' . $homeContent->image_1_sec_3 : null,
+                'disc_1_sec_3'       => $homeContent->disc_1_sec_3,
+                'image_2_sec_3'      => $homeContent->image_2_sec_3 ? $this->baseUrl . '/storage/' . $homeContent->image_2_sec_3 : null,
+                'disc_2_sec_3'       => $homeContent->disc_2_sec_3,
+                'image_3_sec_3'      => $homeContent->image_3_sec_3 ? $this->baseUrl . '/storage/' . $homeContent->image_3_sec_3 : null,
+                'disc_3_sec_3'       => $homeContent->disc_3_sec_3,
+                'image_4_sec_3'      => $homeContent->image_4_sec_3 ? $this->baseUrl . '/storage/' . $homeContent->image_4_sec_3 : null,
+                'disc_4_sec_3'       => $homeContent->disc_4_sec_3,
+                'image_5_sec_3'      => $homeContent->image_5_sec_3 ? $this->baseUrl . '/storage/' . $homeContent->image_5_sec_3 : null,
+                'disc_5_sec_3'       => $homeContent->disc_5_sec_3,
             ];
 
             return response()->json($response, 200);
@@ -50,178 +63,193 @@ class HomeContentController extends Controller
     {
         // Validate request using Validator
         $validator = Validator::make($request->all(), [
-            'heading' => 'required|string|max:255',
-            'heading_nxt' => 'required|string|max:255',
-            'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
-            'image_2' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
-            'Sub_heading_2' => 'required|string|max:255',
-            'heading_2' => 'required|string|max:255',
-            'description_2' => 'required|string',
-            'button_1' => 'required|string|max:255', // Added field
-            'button_2' => 'required|string|max:255',
+            'heading'            => 'required|string|max:255',
+            'heading_nxt'        => 'required|string|max:255',
+            'description'        => 'required|string',
+            'heading_2'          => 'required|string|max:255',
+            'Sub_heading_2'      => 'required|string|max:255',
+            'description_2'      => 'required|string',
+            's_description_1'    => 'required|string',
+            's_description_2'    => 'required|string',
+            's_description_3'    => 'required|string',
+            'image'              => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'image_2'            => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'third_sec_heading'  => 'required|string|max:255',
+            'image_1_sec_3'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'disc_1_sec_3'       => 'nullable|string',
+            'image_2_sec_3'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'disc_2_sec_3'       => 'nullable|string',
+            'image_3_sec_3'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'disc_3_sec_3'       => 'nullable|string',
+            'image_4_sec_3'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'disc_4_sec_3'       => 'nullable|string',
+            'image_5_sec_3'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'disc_5_sec_3'       => 'nullable|string',
         ]);
 
         // Check if validation fails
         if ($validator->fails()) {
             return response()->json([
+                'status' => false,
+                'message' => 'Validation error',
                 'errors' => $validator->errors(),
             ], 422);
         }
 
-        $imagePath = null;
-        $image2Path = null;
+        // Handle image uploads if they exist
+        $imagePath = $request->hasFile('image') ? $request->file('image')->store('home', 'public') : null;
+        $image2Path = $request->hasFile('image_2') ? $request->file('image_2')->store('home', 'public') : null;
 
-        // Handle image uploads
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imagePath = $image->store('home', 'public');
-        }
+        // Save home content details to the database
+        $homeContent = HomeContent::create([
+            'heading'            => $request->input('heading'),
+            'heading_nxt'        => $request->input('heading_nxt'),
+            'description'        => $request->input('description'),
+            'heading_2'          => $request->input('heading_2'),
+            'Sub_heading_2'      => $request->input('Sub_heading_2'),
+            'description_2'      => $request->input('description_2'),
+            's_description_1'    => $request->input('s_description_1'),
+            's_description_2'    => $request->input('s_description_2'),
+            's_description_3'    => $request->input('s_description_3'),
+            'image'              => $imagePath,
+            'image_2'            => $image2Path,
+            'third_sec_heading'  => $request->input('third_sec_heading'),
+            'image_1_sec_3'      => $request->hasFile('image_1_sec_3') ? $request->file('image_1_sec_3')->store('home', 'public') : null,
+            'disc_1_sec_3'       => $request->input('disc_1_sec_3'),
+            'image_2_sec_3'      => $request->hasFile('image_2_sec_3') ? $request->file('image_2_sec_3')->store('home', 'public') : null,
+            'disc_2_sec_3'       => $request->input('disc_2_sec_3'),
+            'image_3_sec_3'      => $request->hasFile('image_3_sec_3') ? $request->file('image_3_sec_3')->store('home', 'public') : null,
+            'disc_3_sec_3'       => $request->input('disc_3_sec_3'),
+            'image_4_sec_3'      => $request->hasFile('image_4_sec_3') ? $request->file('image_4_sec_3')->store('home', 'public') : null,
+            'disc_4_sec_3'       => $request->input('disc_4_sec_3'),
+            'image_5_sec_3'      => $request->hasFile('image_5_sec_3') ? $request->file('image_5_sec_3')->store('home', 'public') : null,
+            'disc_5_sec_3'       => $request->input('disc_5_sec_3'),
+        ]);
 
-        if ($request->hasFile('image_2')) {
-            $image2 = $request->file('image_2');
-            $image2Path = $image2->store('home', 'public');
-        }
-
-        // Save the content to the database
-        $homeContent = HomeContent::updateOrCreate(
-            [], // Update the first record or create if none exists
-            [
-                'heading' => $request->heading,
-                'heading_nxt' => $request->heading_nxt,
-                'description' => $request->description,
-                'image' => $imagePath,
-                'image_2' => $image2Path,
-                'Sub_heading_2' => $request->Sub_heading_2,
-                'heading_2' => $request->heading_2,
-                'description_2' => $request->description_2,
-                'button_1' => $request->button_1, // Added field
-                'button_2' => $request->button_2,
-            ]
-        );
-
+        // Return success response
         return response()->json([
-            'message' => 'Content uploaded successfully',
-            'heading' => $homeContent->heading,
-            'heading_nxt' => $homeContent->heading_nxt,
-            'description' => $homeContent->description,
-            'image' => $imagePath ? $this->baseUrl . '/storage/' . $imagePath : null,
-            'image_2' => $image2Path ? $this->baseUrl . '/storage/' . $image2Path : null,
-            'Sub_heading_2' => $homeContent->Sub_heading_2,
-            'heading_2' => $homeContent->heading_2,
-            'description_2' => $homeContent->description_2,
-            'button_1' => $homeContent->button_1, // Added field
-            'button_2' => $homeContent->button_2,
-        ], 200);
+            'message' => 'Home content created successfully.',
+            'data'    => $homeContent
+        ], 201);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         // Validate request using Validator
         $validator = Validator::make($request->all(), [
-            'heading' => 'required|string|max:255',
-            'heading_nxt' => 'required|string|max:255',
-            'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
-            'image_2' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
-            'Sub_heading_2' => 'required|string|max:255',
-            'heading_2' => 'required|string|max:255',
-            'description_2' => 'required|string',
-            'button_1' => 'required|string|max:255', // Added field
-            'button_2' => 'required|string|max:255',
+            'heading'            => 'required|string|max:255',
+            'heading_nxt'        => 'required|string|max:255',
+            'description'        => 'required|string',
+            'heading_2'          => 'required|string|max:255',
+            'Sub_heading_2'      => 'required|string|max:255',
+            'description_2'      => 'required|string',
+            's_description_1'    => 'required|string',
+            's_description_2'    => 'required|string',
+            's_description_3'    => 'required|string',
+            'image'              => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'image_2'            => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'third_sec_heading'  => 'required|string|max:255',
+            'image_1_sec_3'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'disc_1_sec_3'       => 'nullable|string',
+            'image_2_sec_3'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'disc_2_sec_3'       => 'nullable|string',
+            'image_3_sec_3'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'disc_3_sec_3'       => 'nullable|string',
+            'image_4_sec_3'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'disc_4_sec_3'       => 'nullable|string',
+            'image_5_sec_3'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'disc_5_sec_3'       => 'nullable|string',
         ]);
 
         // Check if validation fails
         if ($validator->fails()) {
             return response()->json([
+                'status' => false,
+                'message' => 'Validation error',
                 'errors' => $validator->errors(),
             ], 422);
         }
 
-        $homeContent = HomeContent::first(); // Fetch the current record
-
+        // Find the home content
+        $homeContent = HomeContent::find($id);
         if (!$homeContent) {
             return response()->json([
-                'message' => 'No content to update.'
+                'message' => 'Content not found.'
             ], 404);
         }
 
-        $currentImagePath = $homeContent->image;
-        $currentImage2Path = $homeContent->image_2;
-
-        // Handle image uploads
+        // Handle image uploads if they exist
         if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($currentImagePath && Storage::disk('public')->exists($currentImagePath)) {
-                Storage::disk('public')->delete($currentImagePath);
+            // Delete old image if it exists
+            if ($homeContent->image && Storage::exists('public/' . $homeContent->image)) {
+                Storage::delete('public/' . $homeContent->image);
             }
-
-            $image = $request->file('image');
-            $imagePath = $image->store('home', 'public');
-            $homeContent->image = $imagePath;
+            $homeContent->image = $request->file('image')->store('home', 'public');
         }
 
         if ($request->hasFile('image_2')) {
-            // Delete old image_2 if exists
-            if ($currentImage2Path && Storage::disk('public')->exists($currentImage2Path)) {
-                Storage::disk('public')->delete($currentImage2Path);
+            // Delete old image if it exists
+            if ($homeContent->image_2 && Storage::exists('public/' . $homeContent->image_2)) {
+                Storage::delete('public/' . $homeContent->image_2);
             }
-
-            $image2 = $request->file('image_2');
-            $image2Path = $image2->store('home', 'public');
-            $homeContent->image_2 = $image2Path;
+            $homeContent->image_2 = $request->file('image_2')->store('home', 'public');
         }
 
-        // Update other fields
-        $homeContent->heading = $request->heading;
-        $homeContent->heading_nxt = $request->heading_nxt;
-        $homeContent->description = $request->description;
-        $homeContent->Sub_heading_2 = $request->Sub_heading_2;
-        $homeContent->heading_2 = $request->heading_2;
-        $homeContent->description_2 = $request->description_2;
-        $homeContent->button_1 = $request->button_1; // Added field
-        $homeContent->button_2 = $request->button_2;
+        // Update home content details
+        $homeContent->heading            = $request->input('heading');
+        $homeContent->heading_nxt        = $request->input('heading_nxt');
+        $homeContent->description        = $request->input('description');
+        $homeContent->heading_2          = $request->input('heading_2');
+        $homeContent->Sub_heading_2      = $request->input('Sub_heading_2');
+        $homeContent->description_2      = $request->input('description_2');
+        $homeContent->s_description_1    = $request->input('s_description_1');
+        $homeContent->s_description_2    = $request->input('s_description_2');
+        $homeContent->s_description_3    = $request->input('s_description_3');
+        $homeContent->third_sec_heading  = $request->input('third_sec_heading');
+        $homeContent->image_1_sec_3      = $request->hasFile('image_1_sec_3') ? $request->file('image_1_sec_3')->store('home', 'public') : $homeContent->image_1_sec_3;
+        $homeContent->disc_1_sec_3       = $request->input('disc_1_sec_3');
+        $homeContent->image_2_sec_3      = $request->hasFile('image_2_sec_3') ? $request->file('image_2_sec_3')->store('home', 'public') : $homeContent->image_2_sec_3;
+        $homeContent->disc_2_sec_3       = $request->input('disc_2_sec_3');
+        $homeContent->image_3_sec_3      = $request->hasFile('image_3_sec_3') ? $request->file('image_3_sec_3')->store('home', 'public') : $homeContent->image_3_sec_3;
+        $homeContent->disc_3_sec_3       = $request->input('disc_3_sec_3');
+        $homeContent->image_4_sec_3      = $request->hasFile('image_4_sec_3') ? $request->file('image_4_sec_3')->store('home', 'public') : $homeContent->image_4_sec_3;
+        $homeContent->disc_4_sec_3       = $request->input('disc_4_sec_3');
+        $homeContent->image_5_sec_3      = $request->hasFile('image_5_sec_3') ? $request->file('image_5_sec_3')->store('home', 'public') : $homeContent->image_5_sec_3;
+        $homeContent->disc_5_sec_3       = $request->input('disc_5_sec_3');
         $homeContent->save();
 
+        // Return success response
         return response()->json([
-            'message' => 'Content updated successfully',
-            'heading' => $homeContent->heading,
-            'heading_nxt' => $homeContent->heading_nxt,
-            'description' => $homeContent->description,
-            'image' => $homeContent->image ? $this->baseUrl . '/storage/' . $homeContent->image : null,
-            'image_2' => $homeContent->image_2 ? $this->baseUrl . '/storage/' . $homeContent->image_2 : null,
-            'Sub_heading_2' => $homeContent->Sub_heading_2,
-            'heading_2' => $homeContent->heading_2,
-            'description_2' => $homeContent->description_2,
-            'button_1' => $homeContent->button_1, // Added field
-            'button_2' => $homeContent->button_2,
+            'message' => 'Home content updated successfully.',
+            'data'    => $homeContent
         ], 200);
     }
 
-    public function destroy()
+    public function destroy($id)
     {
-        $homeContent = HomeContent::first(); // Fetch the current record
-
+        // Find the home content
+        $homeContent = HomeContent::find($id);
         if (!$homeContent) {
             return response()->json([
-                'message' => 'No content to delete.'
+                'message' => 'Content not found.'
             ], 404);
         }
 
         // Delete images if they exist
-        if ($homeContent->image && Storage::disk('public')->exists($homeContent->image)) {
-            Storage::disk('public')->delete($homeContent->image);
+        if ($homeContent->image && Storage::exists('public/' . $homeContent->image)) {
+            Storage::delete('public/' . $homeContent->image);
         }
 
-        if ($homeContent->image_2 && Storage::disk('public')->exists($homeContent->image_2)) {
-            Storage::disk('public')->delete($homeContent->image_2);
+        if ($homeContent->image_2 && Storage::exists('public/' . $homeContent->image_2)) {
+            Storage::delete('public/' . $homeContent->image_2);
         }
 
-        // Delete the content
+        // Delete the home content
         $homeContent->delete();
 
+        // Return success response
         return response()->json([
-            'message' => 'Content deleted successfully'
+            'message' => 'Home content deleted successfully.'
         ], 200);
     }
 }
