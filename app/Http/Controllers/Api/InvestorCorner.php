@@ -44,8 +44,9 @@ class InvestorCorner extends Controller
             'field5' => 'required|string',
             'field6' => 'required|string',
             'field7' => 'required|string',
-            'field8' => 'required|string',
-            'field9' => 'required|string',
+            'field8' => 'nullable|string',
+            'field9' => 'nullable|string',
+            'field10' => 'nullable|string',
         ]);
 
         // Check if validation fails
@@ -56,7 +57,7 @@ class InvestorCorner extends Controller
         }
 
         $data = $request->only([
-            'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8', 'field9'
+            'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8', 'field9', 'field10'
         ]);
 
         $imagePath = null;
@@ -95,8 +96,9 @@ class InvestorCorner extends Controller
             'field5' => 'required|string',
             'field6' => 'required|string',
             'field7' => 'required|string',
-            'field8' => 'required|string',
-            'field9' => 'required|string',
+            'field8' => 'nullable|string',
+            'field9' => 'nullable|string',
+            'field10' => 'nullable|string',
         ]);
 
         // Check if validation fails
@@ -110,7 +112,7 @@ class InvestorCorner extends Controller
 
         $currentImagePath = $investor->image;
         $data = $request->only([
-            'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8', 'field9'
+            'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8', 'field9', 'field10'
         ]);
 
         // Handle image upload

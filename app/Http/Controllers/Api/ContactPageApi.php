@@ -96,11 +96,13 @@ class ContactPageApi extends Controller
         \Log::info('Request Method:', [$request->method()]);
         \Log::info('Request Headers:', $request->headers->all());
     
+        
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|string',
             'number' => 'required|string',
         ]);
+        $contentType = $request->header('Content-Type');
 
     
         if ($validator->fails()) {
@@ -109,6 +111,8 @@ class ContactPageApi extends Controller
     
             return response()->json([
                 'errors' => $validator->errors(),
+                'dd' => $request->all(),
+                'errors__' => $contentType,
             ], 422);
         }
     

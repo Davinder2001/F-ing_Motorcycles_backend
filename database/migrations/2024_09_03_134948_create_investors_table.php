@@ -15,16 +15,17 @@ class CreateInvestorsTable extends Migration
     {
         Schema::create('investors', function (Blueprint $table) {
             $table->id();
-            $table->string('field1');
-            $table->string('field2');
-            $table->string('field3');
-            $table->string('field4');
-            $table->string('field5');
-            $table->string('field6');
-            $table->string('field7');
-            $table->string('field8');
-            $table->string('field9');
-            $table->string('image')->nullable(); // Make image field nullable
+            $table->string('field1', 1000)->nullable();  // Specify length if needed
+            $table->string('field2', 1000)->nullable();  // Increase length for large content
+            $table->string('field3', 1000)->nullable();  // Specify length if needed
+            $table->string('field4', 1000)->nullable();  // Specify length if needed
+            $table->string('field5', 1000)->nullable();  // Specify length if needed
+            $table->string('field6', 1000)->nullable();  // Specify length if needed
+            $table->string('field7', 1000)->nullable();  // Specify length if needed
+            $table->string('field8', 1000)->nullable();  // Specify length if needed
+            $table->string('field9', 1000)->nullable();  // Specify length if needed
+            $table->string('field10', 1000)->nullable(); // Specify length if needed
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

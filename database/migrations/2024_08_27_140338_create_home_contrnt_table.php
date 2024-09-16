@@ -35,6 +35,12 @@ return new class extends Migration
             $table->text('disc_4_sec_3')->nullable();        // Added field for the fourth description in the third section
             $table->string('image_5_sec_3')->nullable();     // Added field for the fifth image in the third section
             $table->text('disc_5_sec_3')->nullable();        // Added field for the fifth description in the third section
+            
+            // SEO Fields
+            $table->string('seo_title')->nullable();         // Added field for SEO title
+            $table->text('seo_description')->nullable();     // Added field for SEO description
+            $table->string('seo_keywords')->nullable();      // Added field for SEO keywords
+
             $table->timestamps();
         });
     }

@@ -17,26 +17,29 @@ class HomeContent extends Model
         'heading',
         'heading_nxt',
         'description',
+        'heading_2',
+        'Sub_heading_2',
+        'description_2',
+        's_description_1',
+        's_description_2',
+        's_description_3',
         'image',
         'image_2',
-        'Sub_heading_2',
-        'heading_2',
-        'description_2',
-        's_description_1',  // Added field
-        's_description_2',  // Added field
-        's_description_3',  // Added field
-        'third_sec_heading', // Added field
-        'image_1_sec_3',    // Added field
-        'disc_1_sec_3',     // Added field
-        'image_2_sec_3',    // Added field
-        'disc_2_sec_3',     // Added field
-        'image_3_sec_3',    // Added field
-        'disc_3_sec_3',     // Added field
-        'image_4_sec_3',    // Added field
-        'disc_4_sec_3',     // Added field
-        'image_5_sec_3',    // Added field
-        'disc_5_sec_3',     // Added field
-        'button_1',         // Existing field
-        'button_2',         // Existing field
+        'third_sec_heading',
+        'image_1_sec_3',
+        'disc_1_sec_3',
+        'image_2_sec_3',
+        'disc_2_sec_3',
+        'image_3_sec_3',
+        'disc_3_sec_3',
+        'image_4_sec_3',
+        'disc_4_sec_3',
+        'image_5_sec_3',
+        'disc_5_sec_3',
+
+        // SEO Fields
+        'seo_title',
+        'seo_description',
+        'seo_keywords',
     ];
 }

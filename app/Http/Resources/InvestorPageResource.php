@@ -39,6 +39,7 @@ class InvestorPageResource extends JsonResource
             'field7' => $this->field7,
             'field8' => $this->field8,
             'field9' => $this->field9,
+            'field10' => $this->field10,
         ];
     }
 }
